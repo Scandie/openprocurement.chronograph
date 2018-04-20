@@ -15,6 +15,7 @@ try:
 except ImportError:
     now = datetime.now()
     test_auction_data = {
+        "procurementMethodType": "exampleBelowThreshold",
         "title": u"футляри до державних нагород",
         "procuringEntity": {
             "name": u"Державне управління справами",
