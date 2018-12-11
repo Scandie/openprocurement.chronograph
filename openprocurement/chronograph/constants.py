@@ -26,17 +26,4 @@ DEFAULT_STREAMS_DOC = {
     'dutch_streams': 15,
     'texas_streams': 20
 }
-
-AUCTIONS = [
-    {
-        'type': 'insider',
-        'pmts': ['dgfInsider', 'sellout.insider']
-    },
-    {
-        'type': 'texas',
-        'pmts': ['landLease']
-    },
-    {
-        'type': 'english'
-    }
-]
+DEFAULT_AUCTION_TYPE = 'english'

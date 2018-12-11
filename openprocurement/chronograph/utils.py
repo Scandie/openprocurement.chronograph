@@ -21,7 +21,8 @@ from openprocurement.chronograph.constants import (
     SERVICE_TIME,
     SMOOTHING_MIN,
     SMOOTHING_MAX,
-    DEFAULT_STREAMS_DOC
+    DEFAULT_STREAMS_DOC,
+    DEFAULT_AUCTION_TYPE
 )
 
 POOL = Pool(1)
@@ -195,7 +196,7 @@ def get_request(url, auth, session, headers=None):
 
 
 def get_manager_for_auction(auction, mapper):
-    default_manager = mapper['types'].get('english', None)
+    default_manager = mapper['types'].get(DEFAULT_AUCTION_TYPE, None)
 
     auction_type = auction.get('auctionParameters', {}).get('type', None)
     if auction_type:

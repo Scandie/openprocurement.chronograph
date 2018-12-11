@@ -8,7 +8,7 @@ from couchdb import Server, Session
 from couchdb.http import Unauthorized, extract_credentials
 from datetime import datetime, timedelta
 #from openprocurement.chronograph.jobstores import CouchDBJobStore
-from openprocurement.chronograph.constants import AUCTIONS
+from openprocurement.chronograph.constants import DEFAULT_AUCTION_TYPE
 from openprocurement.chronograph.design import sync_design
 from openprocurement.chronograph.managers import MANAGERS_MAPPING
 from openprocurement.chronograph.scheduler import push
@@ -111,11 +111,15 @@ def main(global_config, **settings):
     config.registry.db = db
 
     config.registry.manager_mapper = {'types': {}, 'pmts': {}}
-    for auction in AUCTIONS:
-        auction_manager = MANAGERS_MAPPING[auction['type']]()
-        config.registry.manager_mapper['types'][auction['type']] = auction_manager
-        if auction.get('pmts', []):
-            config.registry.manager_mapper['pmts'].update({pmt: auction_manager for pmt in auction.get('pmts')})
+    auctions = settings.get('auctions', DEFAULT_AUCTION_TYPE).split(',')
+    for auction in auctions:
+        auction_manager = MANAGERS_MAPPING[auction]()
+        config.registry.manager_mapper['types'][auction] = auction_manager
+        pmts = settings.get(auction)
+        if pmts:
+            config.registry.manager_mapper['pmts'].update(
+                {pmt: auction_manager for pmt in pmts.split(',')}
+            )
 
     jobstores = {
         #'default': CouchDBJobStore(database=db_name, client=server)
